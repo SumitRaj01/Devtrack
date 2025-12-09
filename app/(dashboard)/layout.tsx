@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function DashboardLayout({
   children,
 }: {
@@ -8,10 +9,10 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <aside className="w-60 bg-gray-900 text-white p-4">
         <h2 className="font-bold text-lg">DevTrack</h2>
-        <nav className="mt-4 space-y-2 text-sm">
-          <div>Dashboard</div>
-          <div>Projects</div>
-          <div>Settings</div>
+        <nav className="mt-6 flex flex-col gap-3 text-sm">
+          <Link href="/">Dashboard</Link>
+          <Link href="/projects">Projects</Link>
+          <Link href="/settings">Settings</Link>
         </nav>
       </aside>
 

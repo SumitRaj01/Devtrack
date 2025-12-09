@@ -1,6 +1,7 @@
 import { getProjects } from "@/lib/projects";
 import { getStats } from "@/lib/stats";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 export default async function Home() {
   const [projects, summaryCards] = await Promise.all([
@@ -50,7 +51,9 @@ export default async function Home() {
               key={project.id}
               className="rounded border p-3 bg-white shadow-sm"
             >
+             <Link href={`/projects/${project.id}`}>
               <div className="font-medium text-teal-600">{project.name}</div>
+              </Link>
               <span className="inline-block text-xs rounded bg-gray-100 px-2 py-1 text-gray-700">
                 {project.status}
               </span>
