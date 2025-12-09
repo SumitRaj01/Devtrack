@@ -1,5 +1,6 @@
 import { getProjects } from "@/lib/projects";
 import { getStats } from "@/lib/stats";
+import { notFound } from "next/navigation";
 
 export default async function Home() {
   const [projects, summaryCards] = await Promise.all([
@@ -60,3 +61,9 @@ export default async function Home() {
     </div>
   );
 }
+
+
+
+// export default async function Home() {
+//   notFound();
+// }
