@@ -18,5 +18,7 @@ export const tasks = pgTable("tasks", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   completed: integer("completed").default(0), 
-  projectId: integer("project_id").notNull(), 
+  projectId: integer("project_id")
+  .notNull()
+  .references(()=>projects.id) 
 });
