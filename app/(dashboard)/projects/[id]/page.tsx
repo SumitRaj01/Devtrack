@@ -1,8 +1,6 @@
-import { db } from "@/db";
-import { projects } from "@/db/schema";
-import { getProjectWithTasks } from "@/lib/projects";
-import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
+import { getProjectWithTasks } from "@/lib/projects";
+import { createTask, toggleTask, deleteTask } from "@/lib/actions";
 
 export default async function ProjectDetailPage({
   params,
@@ -10,6 +8,7 @@ export default async function ProjectDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
+
   const data = await getProjectWithTasks(Number(id));
 
   if (!data) {
@@ -20,11 +19,24 @@ export default async function ProjectDetailPage({
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold text-teal-600">{project.name}</h1>
-      <p className="text-gray-600 mt-2">Status: {project.status}</p>
+      {/* Project Header */}
+      <h1 className="text-2xl font-semibold">{project.name}</h1>
+      <p className="text-gray-600 mb-6">Status: {project.status}</p>
 
-      <h2 className="text-lg font-medium mt-6 mb-3">Tasks</h2>
+      {/* Create Task Form */}
+      <form action={createTask} className="mb-4 flex gap-2">
+        <input
+          name="title"
+          placeholder="New task"
+          className="border rounded px-3 py-2 flex-1"
+        />
+        <input type="hidden" name="projectId" value={project.id} />
+        <button className="bg-black text-white px-4 py-2 rounded">
+          Add Task
+        </button>
+      </form>
 
+      {/* Task List */}
       {tasks.length === 0 ? (
         <p className="text-gray-500">No tasks yet.</p>
       ) : (
@@ -32,12 +44,37 @@ export default async function ProjectDetailPage({
           {tasks.map((task) => (
             <li
               key={task.id}
-              className="border p-3 rounded bg-white shadow-sm flex justify-between"
+              className="border p-3 rounded bg-white shadow-sm flex justify-between items-center"
             >
-              <span className="text-blue-500">{task.title}</span>
-              <span className="text-sm text-gray-500">
-                {task.completed ? "Completed" : "Pending"}
+              <span className={task.completed ? "line-through text-gray-400" : ""}>
+                {task.title}
               </span>
+
+              <div className="flex gap-3">
+                {/* Toggle Task Completion */}
+                <form
+                  action={async () => {
+                    "use server";
+                    await toggleTask(task.id, task.completed ?? 0, project.id);
+                  }}
+                >
+                  <button className="text-sm text-blue-600">
+                    {task.completed ? "Undo" : "Complete"}
+                  </button>
+                </form>
+
+                {/* Delete Task */}
+                <form
+                  action={async () => {
+                    "use server";
+                    await deleteTask(task.id, project.id);
+                  }}
+                >
+                  <button className="text-sm text-red-600">
+                    Delete
+                  </button>
+                </form>
+              </div>
             </li>
           ))}
         </ul>
