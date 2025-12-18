@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { getProjectWithTasks } from "@/lib/projects";
-import { createTask, toggleTask, deleteTask } from "@/lib/actions";
-
+import { SubmitButton } from "@/app/components/SubmitButton";
+import { createTask, deleteTask, toggleTask } from "@/lib/actions/tasks";
 export default async function ProjectDetailPage({
   params,
 }: {
@@ -31,6 +31,7 @@ export default async function ProjectDetailPage({
           className="border rounded px-3 py-2 flex-1"
         />
         <input type="hidden" name="projectId" value={project.id} />
+          <SubmitButton label="Add Task" />
         <button className="bg-black text-white px-4 py-2 rounded">
           Add Task
         </button>

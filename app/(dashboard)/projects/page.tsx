@@ -1,4 +1,4 @@
-import { createProject } from "@/lib/actions";
+import { createProject } from "@/lib/actions/projects";
 import { getProjects } from "@/lib/projects";
 
 export default async function ProjectsPage() {
